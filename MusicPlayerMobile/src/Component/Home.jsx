@@ -5,15 +5,39 @@ import {
   SafeAreaView,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
-import TrackPlayer from 'react-native-track-player';
-// import songs from '../../model/data';
-export default function Home() {
-  // const Player = async () => {
-  //   await TrackPlayer.setupPlayer();
-  //   await TrackPlayer.add(songs);
-  // };
+import Slider from '@react-native-community/slider';
+import TrackPlayer, {Capability, useProgress} from 'react-native-track-player';
 
+import {useState, useEffect} from 'react';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
+export default function Home() {
+  const [range, setRange] = useState(0);
+  const [isPlaying, SetisPlaying] = useState(false);
+  const Player = async () => {
+    try {
+      await TrackPlayer.setupPlayer();
+      TrackPlayer.updateOptions({
+        capabilities: [Capability.Play, Capability.Pause],
+      });
+      await TrackPlayer.add([
+        {
+          url: require('../assets/NEFFEX.mp3'),
+        },
+      ]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const progress = useProgress();
+  const Sliderr = Value => {
+    TrackPlayer.seekTo(Value);
+  };
+  useEffect(() => {
+    Player();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -23,18 +47,63 @@ export default function Home() {
         />
       </View>
       <View style={styles.Card}>
-        <Image
-          style={styles.icon}
-          source={require('../assets/Icon/Prec.png')}
-        />
-        <Image
-          style={styles.icon}
-          source={require('../assets/Icon/play-button.png')}
-        />
-        <Image
-          style={styles.icon}
-          source={require('../assets/Icon/next-button.png')}
-        />
+        <View style={styles.title}>
+          <Text style={styles.paragraph}>NEFFEX</Text>
+          <Image
+            style={styles.favorite}
+            source={require('../assets/Icon/favorite.png')}
+          />
+        </View>
+        <View>
+          <Text style={styles.paragraph2}>NEFFEX-Hell Won't Take</Text>
+        </View>
+        <View>
+          <Slider
+            style={{width: 400, height: 40, marginTop: 20}}
+            minimumValue={0}
+            maximumValue={100}
+            minimumTrackTintColor="#FFC8D0"
+            maximumTrackTintColor="#FFFFFF"
+            thumbTintColor="#FFC8D0"
+            value={progress.position}
+            step={1}
+            onValueChange={Sliderr}
+          />
+          <View style={styles.time}>
+            <Text>0.00</Text>
+            <Text>2.5</Text>
+          </View>
+        </View>
+        <View style={styles.Play}>
+          <Image
+            style={styles.iconF}
+            source={require('../assets/Icon/previous.png')}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              if (isPlaying == true) {
+                TrackPlayer.pause();
+                SetisPlaying(false);
+              } else {
+                TrackPlayer.play();
+                SetisPlaying(true);
+              }
+            }}>
+            <Image
+              style={styles.icon}
+              source={
+                isPlaying
+                  ? require('../assets/Icon/pause.png')
+                  : require('../assets/Icon/play.png')
+              }
+            />
+          </TouchableOpacity>
+
+          <Image
+            style={styles.icon}
+            source={require('../assets/Icon/next.png')}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -49,11 +118,20 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   paragraph: {
-    margin: 24,
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
+    // textAlign: 'left',
+    marginLeft: 20,
+    marginTop: 5,
+    color: '#FFFFFF',
+  },
+  paragraph2: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    // textAlign: 'left',
+    marginLeft: 20,
+    marginTop: 8,
+    opacity: 0.9,
   },
   image: {
     width: 300,
@@ -64,20 +142,49 @@ const styles = StyleSheet.create({
     backgroundColor: '#171717',
     position: 'absolute',
     bottom: -60,
-    height: 200,
+    height: 340,
     width: Dimensions.get('window').width,
     borderRadius: 30,
     shadowOffset: {width: 4, height: 5},
     shadowOpacity: 0.4,
     shadowRadius: 2,
+    paddingTop: 1,
+    marginBottom: 30,
+  },
+  Play: {
     flexDirection: 'row',
-    padding: 10,
-    marginBottom: 5,
     justifyContent: 'center',
+    marginTop: 20,
   },
   icon: {
-    marginLeft: 30,
-    width: 50,
-    height: 50,
+    marginLeft: 60,
+    width: 40,
+    height: 40,
+    tintColor: '#fff',
+  },
+  iconF: {
+    marginLeft: 20,
+    width: 40,
+    height: 40,
+    tintColor: '#fff',
+  },
+  favorite: {
+    width: 25,
+    height: 25,
+    tintColor: '#fff',
+    marginEnd: 20,
+    marginTop: 10,
+  },
+  title: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 30,
+  },
+  time: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 2,
+    marginRight: 20,
+    marginLeft: 20,
   },
 });

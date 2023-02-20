@@ -109,7 +109,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 40,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#171717',
+
+    opacity: 0.9,
   },
   Card: {
     backgroundColor: '#ffffff',
