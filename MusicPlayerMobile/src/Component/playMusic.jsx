@@ -11,73 +11,36 @@ import Slider from '@react-native-community/slider';
 import TrackPlayer, {Capability, useProgress} from 'react-native-track-player';
 import {useState, useEffect} from 'react';
 import {useRoute} from '@react-navigation/native';
+import {ReadFile} from '../tools/ReadFile';
 
 export default function PlayMusic() {
   const route = useRoute();
 
-  const [range, setRange] = useState(0);
   const [isPlaying, SetisPlaying] = useState(false);
   const id = route.params;
-
-  // const Player = async () => {
-  //   try {
-  //     TrackPlayer.setupPlayer();
-  //     await TrackPlayer.updateOptions({
-  //       capabilities: [Capability.Play, Capability.Pause, Capability.Pause],
-  //     });
-
-  //     await TrackPlayer.add([
-  //       {
-  //         url: id.path,
-  //       },
-  //     ]);
-  //     // await TrackPlayer.skip(id);
-  //     await TrackPlayer.play();
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // initialize TrackPlayer
-  async function setupTrackPlayer() {
-    await TrackPlayer.setupPlayer();
-    await TrackPlayer.updateOptions({
-      capabilities: [Capability.Play, Capability.Pause, Capability.Pause],
-    });
-  }
-
-  // add and play the track
-  async function playTrack(id) {
-    await TrackPlayer.add([
-      {
-        id: id.path,
-        url: id.path,
-        title: 'Track Title',
-        artist: 'Track Artist',
-      },
-    ]);
-    await TrackPlayer.skip(id);
-    await TrackPlayer.play();
-  }
-
-  // call the setupTrackPlayer() function when the component mounts
-  useEffect(() => {
-    setupTrackPlayer();
-  }, []);
-
-  // call the playTrack() function when a new track is selected
-  useEffect(() => {
-    playTrack(id);
-  }, [id]);
 
   const progress = useProgress();
   const Sliderr = Value => {
     TrackPlayer.seekTo(Value);
   };
-  // useEffect(() => {
-  //   Player();
-  //   console.log(id.name);
-  // }, [id]);
+  const playSong = async () => {
+    try {
+      const res = await ReadFile();
+      await TrackPlayer.setupPlayer();
+      await TrackPlayer.reset();
+      await TrackPlayer.add(res);
+      console.log(id.id);
+      await TrackPlayer.skip(id.id);
+      await TrackPlayer.play();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    playSong();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -94,9 +57,7 @@ export default function PlayMusic() {
             source={require('../assets/Icon/favorite.png')}
           />
         </View>
-        <View>
-          <Text style={styles.paragraph2}>{id.name}</Text>
-        </View>
+        <View>{/* <Text style={styles.paragraph2}>{id.name}</Text> */}</View>
         <View>
           <Slider
             style={{width: 400, height: 40, marginTop: 20}}

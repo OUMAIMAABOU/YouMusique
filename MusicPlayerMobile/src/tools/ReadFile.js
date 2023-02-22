@@ -8,13 +8,12 @@ export const ReadFile = () => {
     for (let content in contents) {
       if (contents[content]['name'].endsWith('.mp3')) {
         tab.push({
-          Path: contents[content]['path'],
-          name: contents[content]['name'],
+          id: content,
+          url: contents[content]['path'],
+          title: contents[content]['name'],
         });
       }
     }
     return tab;
   });
 };
-
-export const show = async () => {};

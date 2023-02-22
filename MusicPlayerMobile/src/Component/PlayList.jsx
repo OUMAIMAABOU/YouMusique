@@ -7,31 +7,44 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-// import RNFS from 'react-native-fs';
 import {ReadFile} from '../tools/ReadFile';
 import {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import TrackPlayer from 'react-native-track-player';
 
 export default function PlayList() {
   const [content, setContent] = useState([]);
   const navigation = useNavigation();
+  const [isPlaying, SetisPlaying] = useState(false);
+
   useEffect(() => {
     ReadFile().then(res => {
       setContent(res);
     });
   }, []);
 
-  const handlePress = (id, name) => {
-    navigation.navigate('playMusic', {path: id, name: name});
+  const handlePress = id => {
+    navigation.navigate('playMusic', {id: id});
   };
-  //     <TouchableOpacity onPress={() => handlePress(item?.Path, item?.name)}>
-  //     </TouchableOpacity>
+
+  // const onClick = path => {
+  //   {
+  //     if (isPlaying == true) {
+  //       TrackPlayer.pause();
+  //       playTrack(path);
+  //       SetisPlaying(false);
+  //     } else {
+  //       TrackPlayer.play();
+  //       SetisPlaying(true);
+  //     }
+  //   }
+  // };
 
   return (
     <ScrollView>
       <Text>im here</Text>
       {content.map((item, index) => (
-        <View style={styles.Card}>
+        <View key={index} style={styles.Card}>
           <View>
             <Image
               style={styles.image}
@@ -40,10 +53,20 @@ export default function PlayList() {
           </View>
           <View>
             <Text style={[styles.paragraph, styles.Title]}>
-              <Text>{item?.name}</Text>
+              <Text onPress={() => handlePress(item.id)}>{item?.title}</Text>
             </Text>
             <Text style={styles.paragraph}>NEFFEX</Text>
           </View>
+          {/* <TouchableOpacity onPress={() => onClick(item?.Path)}> */}
+          <Image
+            style={styles.icon}
+            source={
+              isPlaying
+                ? require('../assets/Icon/pause.png')
+                : require('../assets/Icon/play.png')
+            }
+          />
+          {/* </TouchableOpacity> */}
         </View>
       ))}
     </ScrollView>
@@ -74,9 +97,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginLeft: 20,
     color: 'black',
-    width: 299,
+    width: 285,
   },
   Title: {
     color: '#34495e',
@@ -85,5 +107,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 100,
+  },
+  icon: {
+    marginLeft: 2,
+    width: 30,
+    height: 30,
   },
 });
