@@ -1,107 +1,51 @@
-import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+// import RNFS from 'react-native-fs';
+import {ReadFile} from '../tools/ReadFile';
+import {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 export default function PlayList() {
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.Card}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/image/Inner.png')}
-          />
-        </View>
-        <View>
-          <Text style={[styles.paragraph, styles.Title]}>
-            NEFFEX-Hell Won't Take
-          </Text>
-          <Text style={styles.paragraph}>NEFFEX</Text>
-        </View>
-      </View>
+  const [content, setContent] = useState([]);
+  const navigation = useNavigation();
+  useEffect(() => {
+    ReadFile().then(res => {
+      setContent(res);
+    });
+  }, []);
 
-      <View style={styles.Card}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/image/Inner.png')}
-          />
+  const handlePress = (id, name) => {
+    navigation.navigate('playMusic', {path: id, name: name});
+  };
+  //     <TouchableOpacity onPress={() => handlePress(item?.Path, item?.name)}>
+  //     </TouchableOpacity>
+
+  return (
+    <ScrollView>
+      <Text>im here</Text>
+      {content.map((item, index) => (
+        <View style={styles.Card}>
+          <View>
+            <Image
+              style={styles.image}
+              source={require('../assets/image/Inner.png')}
+            />
+          </View>
+          <View>
+            <Text style={[styles.paragraph, styles.Title]}>
+              <Text>{item?.name}</Text>
+            </Text>
+            <Text style={styles.paragraph}>NEFFEX</Text>
+          </View>
         </View>
-        <View>
-          <Text style={[styles.paragraph, styles.Title]}>
-            NEFFEX-Hell Won't Take
-          </Text>
-          <Text style={styles.paragraph}>NEFFEX</Text>
-        </View>
-      </View>
-      <View style={styles.Card}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/image/Inner.png')}
-          />
-        </View>
-        <View>
-          <Text style={[styles.paragraph, styles.Title]}>
-            NEFFEX-Hell Won't Take
-          </Text>
-          <Text style={styles.paragraph}>NEFFEX</Text>
-        </View>
-      </View>
-      <View style={styles.Card}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/image/Inner.png')}
-          />
-        </View>
-        <View>
-          <Text style={[styles.paragraph, styles.Title]}>
-            NEFFEX-Hell Won't Take
-          </Text>
-          <Text style={styles.paragraph}>NEFFEX</Text>
-        </View>
-      </View>
-      <View style={styles.Card}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/image/Inner.png')}
-          />
-        </View>
-        <View>
-          <Text style={[styles.paragraph, styles.Title]}>
-            NEFFEX-Hell Won't Take
-          </Text>
-          <Text style={styles.paragraph}>NEFFEX</Text>
-        </View>
-      </View>
-      <View style={styles.Card}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/image/Inner.png')}
-          />
-        </View>
-        <View>
-          <Text style={[styles.paragraph, styles.Title]}>
-            NEFFEX-Hell Won't Take
-          </Text>
-          <Text style={styles.paragraph}>NEFFEX</Text>
-        </View>
-      </View>
-      <View style={styles.Card}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/image/Inner.png')}
-          />
-        </View>
-        <View>
-          <Text style={[styles.paragraph, styles.Title]}>
-            NEFFEX-Hell Won't Take
-          </Text>
-          <Text style={styles.paragraph}>NEFFEX</Text>
-        </View>
-      </View>
+      ))}
     </ScrollView>
   );
 }
@@ -127,10 +71,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   paragraph: {
-    fontSize: 18,
+    fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
     marginLeft: 20,
+    color: 'black',
+    width: 299,
   },
   Title: {
     color: '#34495e',

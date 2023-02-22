@@ -1,7 +1,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../Component/Home';
 import PlayList from '../Component/PlayList';
-import Icon from 'react-native-vector-icons/Entypo';
+import Subtitle from '../Component/subtitle';
+import PlayMusic from '../Component/playMusic';
 
 import {StyleSheet, Image, View} from 'react-native';
 const tab = createBottomTabNavigator();
@@ -9,6 +10,7 @@ export default function Tabs() {
   return (
     <tab.Navigator
       screenOptions={{
+        activeTintColor: 'red',
         tabBarStyle: [
           {
             backgroundColor: '#171717',
@@ -19,7 +21,7 @@ export default function Tabs() {
         ],
       }}>
       <tab.Screen
-        name="home"
+        name="Home"
         component={Home}
         options={{
           tabBarLabel: '',
@@ -27,7 +29,35 @@ export default function Tabs() {
           tabBarIcon: () => (
             <Image
               style={styles.image}
-              source={require('../assets/Icon/home-3-32.png')}
+              source={require('../assets/Icon/home.png')}
+            />
+          ),
+        }}
+      />
+      <tab.Screen
+        name="playMusic"
+        component={PlayMusic}
+        options={{
+          tabBarLabel: '',
+          headerShown: false,
+          tabBarIcon: () => (
+            <Image
+              style={styles.image}
+              source={require('../assets/Icon/musical-note.png')}
+            />
+          ),
+        }}
+      />
+      <tab.Screen
+        name="subtitle"
+        component={Subtitle}
+        options={{
+          tabBarLabel: '',
+          headerShown: false,
+          tabBarIcon: () => (
+            <Image
+              style={styles.image}
+              source={require('../assets/Icon/microphone.png')}
             />
           ),
         }}
@@ -36,8 +66,14 @@ export default function Tabs() {
         name="PlayList"
         component={PlayList}
         options={{
+          tabBarLabel: '',
           headerShown: false,
-          tabBarIcon: ({color, size}) => <Icon name="home" size={30} />,
+          tabBarIcon: () => (
+            <Image
+              style={styles.image}
+              source={require('../assets/Icon/music-notes.png')}
+            />
+          ),
         }}
       />
     </tab.Navigator>
@@ -45,7 +81,7 @@ export default function Tabs() {
 }
 const styles = StyleSheet.create({
   image: {
-    color: 'red',
+    tintColor: 'white',
   },
   labelStyle: {
     fontSize: 15,
