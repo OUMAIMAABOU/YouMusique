@@ -8,14 +8,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import TrackPlayer, {Capability, useProgress} from 'react-native-track-player';
+import TrackPlayer, {useProgress} from 'react-native-track-player';
 import {useState, useEffect} from 'react';
 import {useRoute} from '@react-navigation/native';
 import {ReadFile} from '../tools/ReadFile';
+import {setupTrackPlayer} from '../tools/TrackPlayer';
 
 export default function PlayMusic() {
   const route = useRoute();
-
+  if (!global.OneTime) {
+    TrackPlayer.setupPlayer();
+    global.OneTime = true;
+  }
   const [isPlaying, SetisPlaying] = useState(false);
   const id = route.params;
 
@@ -25,21 +29,24 @@ export default function PlayMusic() {
   };
   const playSong = async () => {
     try {
-      const res = await ReadFile();
-      await TrackPlayer.setupPlayer();
-      await TrackPlayer.reset();
-      await TrackPlayer.add(res);
-      console.log(id.id);
-      await TrackPlayer.skip(id.id);
-      await TrackPlayer.play();
+      let res = await ReadFile();
+      TrackPlayer.add(res);
+      TrackPlayer.skip(parseInt(id?.id));
+      TrackPlayer.play();
+      SetisPlaying(true);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    playSong();
-  }, []);
+    try {
+      playSong();
+      setupTrackPlayer();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [id]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +69,7 @@ export default function PlayMusic() {
           <Slider
             style={{width: 400, height: 40, marginTop: 20}}
             minimumValue={0}
-            maximumValue={100}
+            maximumValue={200}
             minimumTrackTintColor="#FFC8D0"
             maximumTrackTintColor="#FFFFFF"
             thumbTintColor="#FFC8D0"

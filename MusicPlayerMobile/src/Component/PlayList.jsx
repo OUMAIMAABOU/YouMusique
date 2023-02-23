@@ -27,22 +27,8 @@ export default function PlayList() {
     navigation.navigate('playMusic', {id: id});
   };
 
-  // const onClick = path => {
-  //   {
-  //     if (isPlaying == true) {
-  //       TrackPlayer.pause();
-  //       playTrack(path);
-  //       SetisPlaying(false);
-  //     } else {
-  //       TrackPlayer.play();
-  //       SetisPlaying(true);
-  //     }
-  //   }
-  // };
-
   return (
-    <ScrollView>
-      <Text>im here</Text>
+    <ScrollView style={styles.container}>
       {content.map((item, index) => (
         <View key={index} style={styles.Card}>
           <View>
@@ -57,16 +43,6 @@ export default function PlayList() {
             </Text>
             <Text style={styles.paragraph}>NEFFEX</Text>
           </View>
-          {/* <TouchableOpacity onPress={() => onClick(item?.Path)}> */}
-          <Image
-            style={styles.icon}
-            source={
-              isPlaying
-                ? require('../assets/Icon/pause.png')
-                : require('../assets/Icon/play.png')
-            }
-          />
-          {/* </TouchableOpacity> */}
         </View>
       ))}
     </ScrollView>
@@ -107,10 +83,5 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 100,
-  },
-  icon: {
-    marginLeft: 2,
-    width: 30,
-    height: 30,
   },
 });
