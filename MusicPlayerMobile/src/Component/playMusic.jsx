@@ -21,24 +21,27 @@ export default function PlayMusic() {
     global.OneTime = true;
   }
   const [isPlaying, SetisPlaying] = useState(false);
-  const id = route.params;
-
+  const [Time, SetTime] = useState(0);
+  1;
+  const idTrack = route.params;
   const progress = useProgress();
   const Sliderr = Value => {
     TrackPlayer.seekTo(Value);
   };
   const playSong = async () => {
     try {
-      let res = await ReadFile();
-      TrackPlayer.add(res);
-      TrackPlayer.skip(parseInt(id?.id));
+      TrackPlayer.add(await ReadFile());
+      TrackPlayer.skip(parseInt(idTrack?.id));
       TrackPlayer.play();
       SetisPlaying(true);
     } catch (error) {
       console.error(error);
     }
   };
-
+  // async function getTrackInfo(trackId) {
+  //   const {title} = TrackPlayer.getTrack(trackId) || {};
+  //   Setinfo(title);
+  // }
   useEffect(() => {
     try {
       playSong();
@@ -46,8 +49,8 @@ export default function PlayMusic() {
     } catch (error) {
       console.error(error);
     }
-  }, [id]);
-
+  }, [idTrack]);
+  console.log(idTrack);
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -64,7 +67,9 @@ export default function PlayMusic() {
             source={require('../assets/Icon/favorite.png')}
           />
         </View>
-        <View>{/* <Text style={styles.paragraph2}>{id.name}</Text> */}</View>
+        <View>
+          <Text style={styles.paragraph2}>{idTrack?.Title}</Text>
+        </View>
         <View>
           <Slider
             style={{width: 400, height: 40, marginTop: 20}}
@@ -83,10 +88,16 @@ export default function PlayMusic() {
           </View>
         </View>
         <View style={styles.Play}>
-          <Image
-            style={[styles.iconF, styles.Next_pre]}
-            source={require('../assets/Icon/previous.png')}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              TrackPlayer.skipToNext();
+            }}>
+            <Image
+              style={[styles.iconF, styles.Next_pre]}
+              source={require('../assets/Icon/previous.png')}
+            />
+          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => {
               if (isPlaying == true) {
@@ -106,11 +117,15 @@ export default function PlayMusic() {
               }
             />
           </TouchableOpacity>
-
-          <Image
-            style={[styles.icon, styles.Next_pre]}
-            source={require('../assets/Icon/next.png')}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              TrackPlayer.skipToPrevious();
+            }}>
+            <Image
+              style={[styles.icon, styles.Next_pre]}
+              source={require('../assets/Icon/next.png')}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -135,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     marginLeft: 20,
-    marginTop: 8,
+    marginTop: 5,
     opacity: 0.9,
   },
   image: {
@@ -159,7 +174,6 @@ const styles = StyleSheet.create({
   Play: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
   },
   icon: {
     marginLeft: 60,

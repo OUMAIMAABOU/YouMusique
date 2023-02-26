@@ -4,7 +4,6 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  FlatList,
   TouchableOpacity,
 } from 'react-native';
 import {ReadFile} from '../tools/ReadFile';
@@ -21,10 +20,11 @@ export default function PlayList() {
     ReadFile().then(res => {
       setContent(res);
     });
+    // ReadFile();
   }, []);
 
-  const handlePress = id => {
-    navigation.navigate('playMusic', {id: id});
+  const handlePress = (id, name) => {
+    navigation.navigate('playMusic', {id: id, Title: name});
   };
 
   return (
@@ -39,7 +39,9 @@ export default function PlayList() {
           </View>
           <View>
             <Text style={[styles.paragraph, styles.Title]}>
-              <Text onPress={() => handlePress(item.id)}>{item?.title}</Text>
+              <Text onPress={() => handlePress(item.id, item.title)}>
+                {item?.title}
+              </Text>
             </Text>
             <Text style={styles.paragraph}>NEFFEX</Text>
           </View>
@@ -51,9 +53,8 @@ export default function PlayList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 20,
     backgroundColor: '#171717',
-
     opacity: 0.9,
   },
   Card: {

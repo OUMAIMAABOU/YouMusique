@@ -17,3 +17,20 @@ export const ReadFile = () => {
     return tab;
   });
 };
+
+// export const ReadFile = async () => {
+//   try {
+//     const files = await RNFS.readDir(RNFS.ExternalStorageDirectoryPath);
+//     for (const file of files) {
+//       console.log(files);
+//       if (file.isDirectory()) {
+//         await readAllFiles(file.path);
+//       } else if (file.isFile()) {
+
+//         console.log(file.path);
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
