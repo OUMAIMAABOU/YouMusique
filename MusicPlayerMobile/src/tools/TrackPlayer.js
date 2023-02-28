@@ -6,7 +6,6 @@ export const setupTrackPlayer = async () => {
     capabilities: [
       Capability.Play,
       Capability.Pause,
-      Capability.Pause,
       Capability.SkipToNext,
       Capability.SkipToPrevious,
     ],

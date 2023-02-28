@@ -11,46 +11,44 @@ import Slider from '@react-native-community/slider';
 import TrackPlayer, {useProgress} from 'react-native-track-player';
 import {useState, useEffect} from 'react';
 import {useRoute} from '@react-navigation/native';
-import {ReadFile} from '../tools/ReadFile';
+import {ReadFile, FavoriteMusic, playSong} from '../tools/ReadFile';
 import {setupTrackPlayer} from '../tools/TrackPlayer';
+import duration from '../tools/ConvertTime';
 
 export default function PlayMusic() {
   const route = useRoute();
-  if (!global.OneTime) {
-    TrackPlayer.setupPlayer();
-    global.OneTime = true;
-  }
+ 
   const [isPlaying, SetisPlaying] = useState(false);
-  const [Time, SetTime] = useState(0);
-  1;
+  const [info, Setinfo] = useState({});
+  const [id, Setid] = useState(0);
+
   const idTrack = route.params;
   const progress = useProgress();
   const Sliderr = Value => {
     TrackPlayer.seekTo(Value);
   };
-  const playSong = async () => {
-    try {
-      TrackPlayer.add(await ReadFile());
-      TrackPlayer.skip(parseInt(idTrack?.id));
-      TrackPlayer.play();
-      SetisPlaying(true);
-    } catch (error) {
-      console.error(error);
-    }
+  const getTrackInfo = async trackId => {
+    const {title, url, id} = (await TrackPlayer.getTrack(trackId)) || {};
+    Setinfo({id: id, url: url, title: title});
   };
-  // async function getTrackInfo(trackId) {
-  //   const {title} = TrackPlayer.getTrack(trackId) || {};
-  //   Setinfo(title);
-  // }
+  const getCurrentTrack = async () => {
+    getTrackInfo(await TrackPlayer.getCurrentTrack());
+    Setid(await TrackPlayer.getCurrentTrack());
+  };
+  const readSong = async () => {
+    playSong(await ReadFile(), parseInt(idTrack?.id));
+    SetisPlaying(true);
+  };
   useEffect(() => {
     try {
-      playSong();
+      readSong();
       setupTrackPlayer();
+      getCurrentTrack();
     } catch (error) {
       console.error(error);
     }
   }, [idTrack]);
-  console.log(idTrack);
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -62,19 +60,21 @@ export default function PlayMusic() {
       <View style={styles.Card}>
         <View style={styles.title}>
           <Text style={styles.paragraph}>NEFFEX</Text>
-          <Image
-            style={styles.favorite}
-            source={require('../assets/Icon/favorite.png')}
-          />
+          <TouchableOpacity onPress={() => FavoriteMusic(info)}>
+            <Image
+              style={styles.favorite}
+              source={require('../assets/Icon/favorite.png')}
+            />
+          </TouchableOpacity>
         </View>
         <View>
-          <Text style={styles.paragraph2}>{idTrack?.Title}</Text>
+          <Text style={styles.paragraph2}>{info.title}</Text>
         </View>
         <View>
           <Slider
             style={{width: 400, height: 40, marginTop: 20}}
             minimumValue={0}
-            maximumValue={200}
+            maximumValue={progress.duration}
             minimumTrackTintColor="#FFC8D0"
             maximumTrackTintColor="#FFFFFF"
             thumbTintColor="#FFC8D0"
@@ -83,8 +83,8 @@ export default function PlayMusic() {
             onValueChange={Sliderr}
           />
           <View style={styles.time}>
-            <Text>0.00</Text>
-            <Text>2.5</Text>
+            <Text> {duration(progress.position)}</Text>
+            <Text>{duration(progress.duration)}</Text>
           </View>
         </View>
         <View style={styles.Play}>

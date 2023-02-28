@@ -1,15 +1,7 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 import {ReadFile} from '../tools/ReadFile';
 import {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import TrackPlayer from 'react-native-track-player';
 
 export default function PlayList() {
   const [content, setContent] = useState([]);
@@ -20,7 +12,6 @@ export default function PlayList() {
     ReadFile().then(res => {
       setContent(res);
     });
-    // ReadFile();
   }, []);
 
   const handlePress = (id, name) => {

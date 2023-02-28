@@ -21,15 +21,15 @@ export default function Tabs() {
         ],
       }}>
       <tab.Screen
-        name="Home"
-        component={Home}
+        name="PlayList"
+        component={PlayList}
         options={{
           tabBarLabel: '',
           headerShown: false,
           tabBarIcon: () => (
             <Image
               style={styles.image}
-              source={require('../assets/Icon/home.png')}
+              source={require('../assets/Icon/music-notes.png')}
             />
           ),
         }}
@@ -62,16 +62,17 @@ export default function Tabs() {
           ),
         }}
       />
+
       <tab.Screen
-        name="PlayList"
-        component={PlayList}
+        name="Home"
+        component={Home}
         options={{
           tabBarLabel: '',
           headerShown: false,
           tabBarIcon: () => (
             <Image
-              style={styles.image}
-              source={require('../assets/Icon/music-notes.png')}
+              style={[{width: 40, height: 40, color: '#fff'}, styles.image]}
+              source={require('../assets/Icon/love.png')}
             />
           ),
         }}
