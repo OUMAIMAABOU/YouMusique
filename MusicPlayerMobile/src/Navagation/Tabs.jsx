@@ -71,7 +71,7 @@ export default function Tabs() {
           headerShown: false,
           tabBarIcon: () => (
             <Image
-              style={[{width: 40, height: 40, color: '#fff'}, styles.image]}
+              style={styles.image}
               source={require('../assets/Icon/love.png')}
             />
           ),

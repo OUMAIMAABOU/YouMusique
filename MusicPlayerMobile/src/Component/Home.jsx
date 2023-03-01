@@ -12,7 +12,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
 import TrackPlayer, {useProgress} from 'react-native-track-player';
-import {playSong} from '../tools/ReadFile';
+import {playSong, Favoritedelete} from '../tools/ReadFile';
 
 export default function Home() {
   const [data, setData] = useState({});
@@ -52,6 +52,9 @@ export default function Home() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.TitleG}>Favorite</Text>
+      {/* <TouchableOpacity onPress={() => Favoritedelete()}>
+        <Image source={require('../assets/Icon/delete.png')} />
+      </TouchableOpacity> */}
       <View>
         <FlatList
           data={data}
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 90,
     justifyContent: 'center',
-    bottom: -270,
+    bottom: -260,
     height: 260,
   },
   icon: {

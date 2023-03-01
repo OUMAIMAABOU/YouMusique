@@ -27,12 +27,12 @@ export const FavoriteMusic = async music => {
   await AsyncStorage.setItem('key', JSON.stringify(data));
 };
 
+export const Favoritedelete = async () => {
+  await AsyncStorage.clear();
+};
+
 export const playSong = async (song, id) => {
   try {
-    if (!global.OneTime) {
-      TrackPlayer.setupPlayer();
-      global.OneTime = true;
-    }
     await TrackPlayer.add(song);
     await TrackPlayer.skip(id);
     await TrackPlayer.play();
@@ -40,14 +40,3 @@ export const playSong = async (song, id) => {
     console.error(error);
   }
 };
-
-// const playSong = async () => {
-//   try {
-//     await TrackPlayer.add(await ReadFile());
-//     await TrackPlayer.skip(parseInt(idTrack?.id));
-//     await TrackPlayer.play();
-//     SetisPlaying(true);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };

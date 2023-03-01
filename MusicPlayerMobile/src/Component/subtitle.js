@@ -22,21 +22,24 @@ export default function Subtitle() {
   const [titleSong, setTitle] = useState('');
   const [ArtistName, setArtistName] = useState('');
   const [datas, setdata] = useState(false);
-  const apiKey ='d75QoxXBbUqS9y9GFB-M4mTk7HLVOAKc7sp25sOGnJLk6tpj4EneVl2q0Mgj5zoI';
+  const apiKey =
+    'd75QoxXBbUqS9y9GFB-M4mTk7HLVOAKc7sp25sOGnJLk6tpj4EneVl2q0Mgj5zoI';
   const options = {
     apiKey: 'd75QoxXBbUqS9y9GFB-M4mTk7HLVOAKc7sp25sOGnJLk6tpj4EneVl2q0Mgj5zoI',
     title: titleSong,
     artist: ArtistName,
     optimizeQuery: true,
   };
-  const songs = id => {
-    // const apiUrl = `https://api.genius.com/songs/${id}?access_token=d75QoxXBbUqS9y9GFB-M4mTk7HLVOAKc7sp25sOGnJLk6tpj4EneVl2q0Mgj5zoI`;
-    // axios.get(apiUrl).then(response => console.log(response));
-    // .then(data => {
-    //   const audioUrl = data;
-    //   console.log(audioUrl);
-    // });
-  };
+  // const songs = id => {
+  //   const apiUrl = `https://api.genius.com/songs/${id}?access_token=d75QoxXBbUqS9y9GFB-M4mTk7HLVOAKc7sp25sOGnJLk6tpj4EneVl2q0Mgj5zoI`;
+  //   axios
+  //     .get(apiUrl)
+  //     .then(response => console.log(response))
+  //     .then(data => {
+  //       const audioUrl = data;
+  //       console.log(audioUrl);
+  //     });
+  // };
   const handleTitle = value => {
     setTitle(value);
   };
@@ -47,7 +50,7 @@ export default function Subtitle() {
   const getSongs = () => {
     getSong(options).then(song => {
       play(song);
-      songs(song.id);
+      // songs(song.id);
       setL(song);
       setdata(true);
     });
@@ -58,25 +61,25 @@ export default function Subtitle() {
     TrackPlayer.seekTo(Value);
   };
   const play = async song => {
-    const apiUrl = `https://api.genius.com/search?q=${titleSong} ${ArtistName}`;
-    axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-        },
-      })
-      .then(response => {
-        const songUrl = response.data.response.hits[0].result.url;
-        console.log(songUrl);
-        TrackPlayer.setupPlayer();
-        TrackPlayer.add({
-          url: '../assets/image/NEFFEX.mp3',
-        });
-        TrackPlayer.play();
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    // const apiUrl = `https://api.genius.com/search?q=${titleSong} ${ArtistName}`;
+    // axios
+    //   .get(apiUrl, {
+    //     headers: {
+    //       Authorization: `Bearer ${apiKey}`,
+    //     },
+    //   })
+    //   .then(response => {
+    //     const songUrl = response.data.response.hits[0].result.url;
+    //     console.log(songUrl);
+    //     TrackPlayer.setupPlayer();
+    //     TrackPlayer.add({
+    //       url: '../assets/image/NEFFEX.mp3',
+    //     });
+    //   TrackPlayer.play();
+    // })
+    // .catch(error => {
+    //   console.log(error);
+    // });
 
     // TrackPlayer.skip(song.id);
     TrackPlayer.play();

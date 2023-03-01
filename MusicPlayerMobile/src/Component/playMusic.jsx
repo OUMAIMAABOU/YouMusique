@@ -17,13 +17,14 @@ import duration from '../tools/ConvertTime';
 
 export default function PlayMusic() {
   const route = useRoute();
- 
   const [isPlaying, SetisPlaying] = useState(false);
   const [info, Setinfo] = useState({});
-  const [id, Setid] = useState(0);
-
   const idTrack = route.params;
   const progress = useProgress();
+  if (!global.OneTime) {
+    TrackPlayer.setupPlayer();
+    global.OneTime = true;
+  }
   const Sliderr = Value => {
     TrackPlayer.seekTo(Value);
   };
@@ -33,7 +34,6 @@ export default function PlayMusic() {
   };
   const getCurrentTrack = async () => {
     getTrackInfo(await TrackPlayer.getCurrentTrack());
-    Setid(await TrackPlayer.getCurrentTrack());
   };
   const readSong = async () => {
     playSong(await ReadFile(), parseInt(idTrack?.id));
@@ -41,9 +41,9 @@ export default function PlayMusic() {
   };
   useEffect(() => {
     try {
+      getCurrentTrack();
       readSong();
       setupTrackPlayer();
-      getCurrentTrack();
     } catch (error) {
       console.error(error);
     }
@@ -68,7 +68,7 @@ export default function PlayMusic() {
           </TouchableOpacity>
         </View>
         <View>
-          <Text style={styles.paragraph2}>{info.title}</Text>
+          <Text style={styles.paragraph2}>{idTrack.Title}</Text>
         </View>
         <View>
           <Slider
